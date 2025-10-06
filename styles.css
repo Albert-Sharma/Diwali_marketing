@@ -66,6 +66,14 @@ body {
   background-size: 80px 50px, 90px 60px, cover;
 }
 .hero-inner { text-align: center; padding: 20px; }
+.hero-perspective { perspective: 1200px; display: flex; justify-content: center; align-items: center; margin-bottom: 16px; }
+.hero-logo { margin: 0; width: min(70vw, 520px); height: auto; filter: drop-shadow(0 14px 24px rgba(0,0,0,0.18)); transform-style: preserve-3d; animation: rotateY3D 10s linear infinite; }
+.hero-logo img { width: 100%; height: auto; display: block; transform: translateZ(0.01px); }
+
+@keyframes rotateY3D {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
+}
 .hero-title {
   font-family: 'Marcellus', serif; font-size: clamp(42px, 6vw, 88px);
   color: var(--forest);
@@ -140,6 +148,11 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
+}
+
+/* Small screens tweak */
+@media (max-width: 480px) {
+  .hero-logo { width: min(82vw, 420px); }
 }
 
 
