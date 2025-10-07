@@ -53,6 +53,34 @@
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwbGFraXlqc2FzZ3lteXBreGtqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3NDc3NTAsImV4cCI6MjA3NTMyMzc1MH0.rk6T36i7hlrlsdQ-IgGNo0r0UYkNyqKzWihRRgF8Xe0';
   const SUPABASE_TABLE = 'submissions'; // change to your table name
 
+  // Test database connection on page load
+  async function testDatabaseConnection() {
+    try {
+      console.log('Testing Supabase connection...');
+      const resp = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}?select=count`, {
+        method: 'GET',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+        }
+      });
+      
+      if (resp.ok) {
+        console.log('✅ Database connection successful');
+        return true;
+      } else {
+        console.error('❌ Database connection failed:', resp.status, await resp.text());
+        return false;
+      }
+    } catch (err) {
+      console.error('❌ Database connection error:', err);
+      return false;
+    }
+  }
+
+  // Test connection when page loads
+  testDatabaseConnection();
+
   function isValidMobile(value) {
     return /^\d{10}$/.test(value);
   }
@@ -88,13 +116,18 @@
       if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
         throw new Error('Supabase config not set');
       }
-      const payload = [{
+      
+      // Fix: Send single object, not array
+      const payload = {
         firm_name: data.firmName,
         dealer_name: data.dealerName,
         mobile_number: data.mobileNumber,
         wishes_text: data.wishesText,
         created_at: new Date().toISOString()
-      }];
+      };
+      
+      console.log('Sending data to Supabase:', payload);
+      
       const resp = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}`, {
         method: 'POST',
         headers: {
@@ -106,10 +139,15 @@
         body: JSON.stringify(payload)
       });
 
+      console.log('Response status:', resp.status);
+      console.log('Response headers:', resp.headers);
+
       if (!resp.ok) {
         const errText = await resp.text();
-        throw new Error(errText || `Request failed with ${resp.status}`);
+        console.error('Supabase error response:', errText);
+        throw new Error(`Database error: ${errText || `Request failed with ${resp.status}`}`);
       }
+      
       const result = await resp.json();
       console.log('Supabase insert result:', result);
 
@@ -119,8 +157,8 @@
       if (wc) wc.textContent = '0 / 200 words';
       alert('Thank you! Your details have been recorded.');
     } catch (err) {
-      console.error(err);
-      errorBox.textContent = 'Submission failed. Please try again later.';
+      console.error('Full error details:', err);
+      errorBox.textContent = `Submission failed: ${err.message}. Please check console for details.`;
     }
   });
 })();
