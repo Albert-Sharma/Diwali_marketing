@@ -19,6 +19,13 @@ CREATE POLICY "Allow anonymous inserts" ON submissions
     TO anon
     WITH CHECK (true);
 
+-- Drop existing policy if it exists and recreate
+DROP POLICY IF EXISTS "Allow anonymous inserts" ON submissions;
+CREATE POLICY "Allow anonymous inserts" ON submissions
+    FOR INSERT
+    TO anon
+    WITH CHECK (true);
+
 -- Create a policy that allows authenticated users to read data
 CREATE POLICY "Allow authenticated reads" ON submissions
     FOR SELECT
