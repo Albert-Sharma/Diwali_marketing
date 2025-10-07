@@ -31,7 +31,7 @@ body {
 /* Header/Nav - Removed */
 
 /* Sections */
-.section { padding: 80px 20px; position: relative; }
+.section { padding: 60px 20px; position: relative; }
 .section-title {
   font-family: 'Marcellus', serif; font-size: 32px; text-align: center; color: var(--forest);
   margin: 0 0 24px;
