@@ -121,6 +121,10 @@ body {
 }
 .btn.primary:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(212,175,55,0.5); }
 
+/* Tighter spacing specifically between wishes and details */
+#wishes { padding-bottom: 25px; }
+#details { padding-top: 25px; }
+
 /* Footer */
 .site-footer { text-align: center; padding: 26px 20px; color: #8c8c8c; font-size: 13px; }
 
