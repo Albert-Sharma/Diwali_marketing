@@ -45,6 +45,7 @@
   const firm = document.getElementById('firmName');
   const dealer = document.getElementById('dealerName');
   const mobile = document.getElementById('mobileNumber');
+  const address = document.getElementById('firmAddress');
   const errorBox = document.getElementById('formError');
   if (!form) return;
 
@@ -99,11 +100,16 @@
       firmName: firm.value.trim(),
       dealerName: dealer.value.trim(),
       mobileNumber: mobile.value.trim(),
+      firmAddress: (address?.value || '').trim(),
       wishesText: (document.getElementById('wishesText')?.value || '').trim()
     };
 
     if (!data.firmName || !data.dealerName) {
       errorBox.textContent = 'Please fill firm and dealer names.';
+      return;
+    }
+    if (!data.firmAddress) {
+      errorBox.textContent = 'Please enter the firm address.';
       return;
     }
     if (!isValidMobile(data.mobileNumber)) {
@@ -122,6 +128,7 @@
         firm_name: data.firmName,
         dealer_name: data.dealerName,
         mobile_number: data.mobileNumber,
+        firm_address: data.firmAddress,
         wishes_text: data.wishesText,
         created_at: new Date().toISOString()
       };

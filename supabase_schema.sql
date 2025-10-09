@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS submissions (
     firm_name TEXT NOT NULL,
     dealer_name TEXT NOT NULL,
     mobile_number TEXT NOT NULL,
+    firm_address TEXT NOT NULL,
     wishes_text TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
