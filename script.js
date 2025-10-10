@@ -39,6 +39,46 @@
   updateCount();
 })();
 
+// YouTube Iframe API: show black overlay when video ends
+(function() {
+  const iframe = document.getElementById('promo-video');
+  const overlay = document.getElementById('video-overlay');
+  if (!iframe || !overlay) return;
+
+  // Load YouTube Iframe API if not already present
+  if (!window.YT) {
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+  }
+
+  function onPlayerReady() {
+    // nothing for now
+  }
+
+  function onPlayerStateChange(event) {
+    // 0 = ended
+    if (event.data === 0) {
+      overlay.classList.add('is-visible');
+    }
+  }
+
+  function tryInitPlayer() {
+    if (!window.YT || !window.YT.Player) {
+      setTimeout(tryInitPlayer, 100);
+      return;
+    }
+    new YT.Player('promo-video', {
+      events: {
+        onReady: onPlayerReady,
+        onStateChange: onPlayerStateChange
+      }
+    });
+  }
+
+  tryInitPlayer();
+})();
+
 // Details form validation and submit logging
 (function() {
   const form = document.getElementById('details-form');
